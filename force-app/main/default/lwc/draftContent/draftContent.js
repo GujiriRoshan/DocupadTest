@@ -225,40 +225,40 @@ export default class DraftContent extends NavigationMixin(LightningElement) {
     }
 
     handleComposeEmail(event) {
-        if (this.recordId !== null) {
-            this.isLoading = true;
-            composeEmailData({ recordId: this.recordId })
-                .then(resp => {
-                    this.isLoading = false;
-                    let emailWrapper = resp;
-                    let tempEmailTemp = [];
-                    for (let i = 0; i < emailWrapper.listOfEmailTemplateNames.length; i++) {
-                        tempEmailTemp.push({ label: emailWrapper.listOfEmailTemplateNames[i], value: emailWrapper.listOfEmailTemplateNames[i] });
-                    }
-                    this.emailTemplateNames = tempEmailTemp;
-                    this.toAddress = '';
-                    if (emailWrapper.listOfToAddress.length !== 0) {
-                        for (let i = 0; i < emailWrapper.listOfToAddress.length; i++) {
-                            if (i === emailWrapper.listOfToAddress.length - 1) {
-                                this.toAddress = this.toAddress + emailWrapper.listOfToAddress[i];
-                            } else {
-                                this.toAddress = this.toAddress + emailWrapper.listOfToAddress[i] + ',';
-                            }
+        // if (this.recordId !== null) {
+        //     this.isLoading = true;
+        composeEmailData({ recordId: this.recordId })
+            .then(resp => {
+                this.isLoading = false;
+                let emailWrapper = resp;
+                let tempEmailTemp = [];
+                for (let i = 0; i < emailWrapper.listOfEmailTemplateNames.length; i++) {
+                    tempEmailTemp.push({ label: emailWrapper.listOfEmailTemplateNames[i], value: emailWrapper.listOfEmailTemplateNames[i] });
+                }
+                this.emailTemplateNames = tempEmailTemp;
+                this.toAddress = '';
+                if (emailWrapper.listOfToAddress.length !== 0) {
+                    for (let i = 0; i < emailWrapper.listOfToAddress.length; i++) {
+                        if (i === emailWrapper.listOfToAddress.length - 1) {
+                            this.toAddress = this.toAddress + emailWrapper.listOfToAddress[i];
+                        } else {
+                            this.toAddress = this.toAddress + emailWrapper.listOfToAddress[i] + ',';
                         }
                     }
-                    this.emailSubject = '';
-                    this.emailMessage = '';
-                    //this.toAddress = '';
-                    this.ccAddress = '';
-                    this.bccAddress = '';
-                    this.isDocumentListOpen = false;
-                    this.isDocumentOpen = false;
-                    this.isComposeEmailOpen = true;
-                }).catch(error => {
-                    this.isLoading = false;
-                    showError(this, error);
-                });
-        }
+                }
+                this.emailSubject = '';
+                this.emailMessage = '';
+                //this.toAddress = '';
+                this.ccAddress = '';
+                this.bccAddress = '';
+                this.isDocumentListOpen = false;
+                this.isDocumentOpen = false;
+                this.isComposeEmailOpen = true;
+            }).catch(error => {
+                this.isLoading = false;
+                showError(this, error);
+            });
+        //  }
 
     }
 

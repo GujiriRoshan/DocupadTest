@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <footer class="slds-modal__footer">
-                    <button class="slds-button slds-button_brand" onclick={handleCloseCorpDocList}>Close</button>
+                    <button class="slds-button slds-button_neutral" onclick={handleCloseCorpDocList}>Close</button>
                 </footer>
             </div>
         </section>
@@ -324,15 +324,17 @@
                                 </div>
                             </div>
                             <div class="slds-grid slds-gutters slds-p-top_large">
-                                <p><b>NOTE:</b> The Document will be attached to this email.</p>
+                                <p><b>NOTE:</b> The <b>generated document</b> will be attached to this email
+                                    automatically.</p>
+                                <!-- <p><b>NOTE:</b> The Document will be attached to this email.</p> -->
                             </div>
                         </div>
                     </div>
                 </div>
                 <footer class="slds-modal__footer">
                     <button class="slds-button slds-button_brand" onclick={handleSendEmail}>Send Email</button>
-                    <button class="slds-button slds-button_brand" onclick={handleBackEmailpopup}>Back</button>
-                    <button class="slds-button slds-button_brand" onclick={handleCloseEmailpopup}>Close</button>
+                    <button class="slds-button slds-button_neutral" onclick={handleBackEmailpopup}>Back</button>
+                    <button class="slds-button slds-button_neutral" onclick={handleCloseEmailpopup}>Close</button>
                 </footer>
             </div>
         </section>
@@ -392,8 +394,8 @@
                 </div>
                 <footer class="slds-modal__footer">
                     <button class="slds-button slds-button_brand" onclick={handleSendForEsign}>Send For Esign</button>
-                    <button class="slds-button slds-button_brand" onclick={handleBackDocumentEsign}>Back</button>
-                    <button class="slds-button slds-button_brand" onclick={handleCloseDocumentEsign}>Close</button>
+                    <button class="slds-button slds-button_neutral" onclick={handleBackDocumentEsign}>Back</button>
+                    <button class="slds-button slds-button_neutral" onclick={handleCloseDocumentEsign}>Close</button>
                 </footer>
             </div>
         </section>

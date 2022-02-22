@@ -74,8 +74,8 @@
                 </template>
                 <button class="slds-button slds-button_icon slds-m-right_small" title="Show Template Section"
                     onclick={handleShowSection}>
-                    <lightning-icon data-id='showSection' icon-name={showSectionClass}
-                        alternative-text="Show Section" size="small">
+                    <lightning-icon data-id='showSection' icon-name={showSectionClass} alternative-text="Show Section"
+                        size="small">
                         <!-- <lightning-icon data-id='showSection' icon-name="utility:toggle" alternative-text="Show Section"
                     size="small"> -->
                     </lightning-icon>
@@ -210,11 +210,10 @@
                             </div>
                             <div class="slds-size_1-of-2 slds-m-vertical_xx-small">
                                 <div class="slds-form-element">
-                                    <c-lookup-search lookup-label="Object" object-api-name="NonSetupObjects"                                        
+                                    <c-lookup-search lookup-label="Object" object-api-name="NonSetupObjects"
                                         selected-value={templateData.parentObjectName} onremove={removeParentObjectname}
                                         onrecordselection={handleParentObjectSelection} isdisabled={disabledObjNTem}
-                                        onrecordchange={handleRecordChange}
-                                        isrequired=true>
+                                        onrecordchange={handleRecordChange} isrequired=true>
                                     </c-lookup-search>
                                 </div>
                             </div>
@@ -222,15 +221,15 @@
                             <div class="slds-size_1-of-2 slds-m-vertical_xx-small">
                                 <div class="slds-form-element">
                                     <lightning-combobox name="recordType" class="rt" label="Record Type"
-                                        value={templateData.recordType} placeholder="--None--"
-                                        options={rtOptions} onchange={handlerecordTypeChange} isrequired=true></lightning-combobox>
+                                        value={templateData.recordType} placeholder="--None--" options={rtOptions}
+                                        onchange={handlerecordTypeChange} isrequired=true></lightning-combobox>
                                 </div>
                             </div>
                             <!--
                                  <div class="slds-size_1-of-2"></div>
                             -->
 
-                          <div class="slds-size_1-of-2">
+                            <div class="slds-size_1-of-2">
                                 <div class="slds-form-element">
                                     <lightning-combobox label="Business Unit" placeholder="--None--"
                                         options={templateBUOptions} value={templateData.businessUnit}
@@ -243,10 +242,10 @@
                                     <!-- <lightning-input label="Page Size" value={templateData.pagesize}
                                         onchange={handlePageSizeChange}>
                                     </lightning-input> -->
-                                <lightning-combobox label="Page Size" placeholder="--None--"
-                                    options={templatePSOptions} value={templateData.pagesize}
-                                    onchange={handlePageSizeChange}>
-                                </lightning-combobox>
+                                    <lightning-combobox label="Page Size" placeholder="--None--"
+                                        options={templatePSOptions} value={templateData.pagesize}
+                                        onchange={handlePageSizeChange}>
+                                    </lightning-combobox>
                                 </div>
                             </div>
                             <!-- <div class="slds-size_1-of-2">
@@ -298,7 +297,8 @@
                             class="slds-var-m-horizontal_xx-small slds-p-left_x-small slds-float_right slds-p-top_small"
                             type="checkbox" label=" Search And Copy Section" onchange={handleshowSectionCheck}>
                         </lightning-input>-->
-                        <lightning-button style="margin-left: -4px;margin-right: -13px;" label="Add Section" title="Add Section" onclick={handleAddSection}  icon-name="utility:add"
+                        <lightning-button style="margin-left: -4px;margin-right: -13px;" label="Add Section"
+                            title="Add Section" onclick={handleAddSection} icon-name="utility:add"
                             class="slds-var-m-horizontal_xx-small slds-float_right">
                         </lightning-button>
                     </div>
@@ -793,7 +793,7 @@
                                                                             <div
                                                                                 class="slds-form-element addFieldIconPadding">
 
-                                                                                    <!--break comment-->
+                                                                                <!--break comment-->
                                                                                 <button
                                                                                     class="slds-button slds-button_icon"
                                                                                     title="Parent Field"
@@ -867,8 +867,9 @@
                     </lightning-input>
                     <template if:true={showSectionCopyLookup}>
                         <div class="slds-size_1-of-2 slds-var-m-around_xx-small">
-                            <c-custom-lookup-search lookup-label="Search Section" object-api-name={templateData.parentObjectName}
-                            icon-name="standard:account" onrecordselection={onRecordCopy}>
+                            <c-custom-lookup-search lookup-label="Search Section"
+                                object-api-name={templateData.parentObjectName} icon-name="standard:account"
+                                onrecordselection={onRecordCopy}>
                             </c-custom-lookup-search>
                         </div>
                     </template>

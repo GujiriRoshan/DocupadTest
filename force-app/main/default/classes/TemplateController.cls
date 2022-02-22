@@ -264,6 +264,7 @@ public with sharing class TemplateController {
 
     @AuraEnabled
     public static string getRecordObjectName(Id recordId) {
+        system.debug('recordId is in template controller'+recordId);
          return recordId.getSObjectType().getDescribe().getName();
     }
 

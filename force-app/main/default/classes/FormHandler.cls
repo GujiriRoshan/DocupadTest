@@ -640,7 +640,8 @@ public with sharing class FormHandler {
     @AuraEnabled
     public static EmailWrapper composeEmailData(String recordId) {
         Id recId = recordId;
-        String objectName = recId.getSObjectType().getDescribe().getName();
+        
+        String objectName = String.isBlank(recordId) ? 'docupad__Document_Template__c' : recId.getSObjectType().getDescribe().getName() ;
         List<String> listOfRefFields = new List<String>();
         List<String> listOfEmailTemplateName = new List<String>();
         List<String> listOfEmailsAddress = new List<String>();
@@ -665,23 +666,30 @@ public with sharing class FormHandler {
 
         String queryString;
         //ABDS:s:e:Added if to check if there field list or not.
-
-        if (listOfFields.size()>0)
-        {
-            queryString = 'SELECT Id, '+String.escapeSingleQuotes(String.join(listOfFields, ','))+ ' FROM '+String.escapeSingleQuotes(objectName)+' WHERE Id =: recordId';
+        System.debug('Aj : recordId = '+recordId);
+        if(String.isBlank(recordId)){
+             queryString = 'SELECT Id, Name FROM '+String.escapeSingleQuotes(objectName)+' ORDER BY Name ASC';
+        }else {
+        if (listOfFields.size()>0){
+               queryString = 'SELECT Id, '+String.escapeSingleQuotes(String.join(listOfFields, ','))+ ' FROM '+String.escapeSingleQuotes(objectName)+' WHERE Id =: recordId';
+            }
+            else {
+               queryString = 'SELECT Id FROM '+String.escapeSingleQuotes(objectName)+' WHERE Id =: recordId';
+            }
         }
-        else {
-            queryString = 'SELECT Id FROM '+String.escapeSingleQuotes(objectName)+' WHERE Id =: recordId';
-        }
+        System.debug('Aj : queryString = '+queryString.trim());
         
       //queryString = String.escapeSingleQuotes(queryString);
         //System.debug('queryString'+queryString);
 		
-        sObject objectData = Database.query(queryString);
+        List<sObject> objectDatas = Database.query(queryString);
+        system.debug('object dats is : '+objectDatas);
         
         for (String emailField : listOfFields) {
-            if (objectData.get(emailField) != null) {
-                listOfEmailsAddress.add(String.valueof(objectData.get(emailField)));
+            for(Sobject sobj : objectDatas){
+                if (sobj.get(emailField) != null) {
+                   listOfEmailsAddress.add(String.valueof(sobj.get(emailField)));
+                }
             }
         }
         EmailWrapper wrap = new EmailWrapper();

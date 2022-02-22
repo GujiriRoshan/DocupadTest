@@ -15,16 +15,8 @@ public with sharing class QueryController {
 		Id recordId,
 		String queryJSON) 
 	{
-        queryJSON = String.escapeSingleQuotes(queryJSON);
-		System.debug('getRecordList1==>'+queryJSON);
-
         recordId = String.escapeSingleQuotes(recordId);
-		System.debug('recordId==>'+recordId);
-        Domain.QueryJsonWrapper queryObj = (Domain.QueryJsonWrapper)JSON.deserialize(
-				queryJSON, Domain.QueryJsonWrapper.class);
-		
-		System.debug('queryObj==>'+queryObj);
-
+        Domain.QueryJsonWrapper queryObj = (Domain.QueryJsonWrapper)JSON.deserialize(queryJSON, Domain.QueryJsonWrapper.class);
 		String strFields = String.escapeSingleQuotes(queryObj.fields);
 		String strObjectName = String.escapeSingleQuotes(queryObj.objectName);
 		String strFilter = String.escapeSingleQuotes(queryObj.filter);
@@ -45,17 +37,18 @@ public with sharing class QueryController {
 					permissableFieldsList.add(field.trim());
 				}	
 			}
-		 }
-				 
+		 }	 
 		
 		// strFields=String.join(permissableFieldsList, ',' );
 		//ABDS:e:For FLS
-		
 		String queryStr = String.format('{0}{1}{2}{3}{4}', new List<String>{
+           
 			'SELECT ', String.valueOf(strFields), ' FROM ', String.valueOf(strObjectName), ' WHERE '
 		});
 		
 		if(String.isNotBlank(strFilter)) {
+            System.debug('Till Here = '+queryStr);
+            System.debug('Till Here = '+strFilter);
 			queryStr = String.format('{0}{1}{2}', new List<String>{
 				queryStr, strFilter, ' AND '
 			});
@@ -65,35 +58,30 @@ public with sharing class QueryController {
 		// 	queryStr, strParentFieldApiName, ' = \''+ recordId + '\' ', 
 		// 	' WITH SECURITY_ENFORCED ORDER BY ', strOrderByField, strOrderBy, ' LIMIT ', String.valueOf(intLimit)
 		// });
+	
 
-		queryStr = String.format('{0}{1}{2}{3}', new List<String>{
-			queryStr, strParentFieldApiName, ' = \''+ recordId + '\' ', 
-			' WITH SECURITY_ENFORCED'
+		queryStr = String.format('{0}{1}{2}', new List<String>{
+			queryStr, strParentFieldApiName,' = '+'\\'+'\''+ String.valueOf(recordId) + '\\'+'\' '
 		});
+       
 
+        System.debug('queryStr = '+queryStr);
 		if(String.isNotBlank(strOrderByField)) {
+             System.debug('Till Here');
 			queryStr = String.format('{0}{1} {2} {3} ', new List<String>{
 				queryStr,' ORDER BY ', strOrderByField, strOrderBy
 			});
 		}	
-
-		if(String.isNotBlank(strLimit) ){
-			queryStr = String.format('{0}{1}{2}', new List<String>{
-				queryStr,' LIMIT ', String.valueOf(strLimit)
-			});
-		}
-		
-		System.debug('queryStr==>'+queryStr);
-		
-		/*String queryStr = 'SELECT ' + queryObj.fields + 
-			' FROM ' + queryObj.objectName + 
-			' WHERE ';
-		if(String.isNotBlank(queryObj.filter)) {
-			queryStr += queryObj.filter + ' AND ';
-		}
-		queryStr += queryObj.parentFieldApiName + ' = \''+ recordId + '\' ' + 
-			' ORDER BY ' + queryObj.orderByField + ' ' + queryObj.orderBy +
-			' LIMIT ' + queryObj.recordLimit;*/
+        
+        if(String.isNotBlank(strLimit) ){
+            System.debug('Till Here'+queryStr);
+            System.debug('String.valueOf(strLimit) = '+String.valueOf(strLimit)); 
+            queryStr = String.format('{0}{1}{2}', new List<String>{
+                queryStr,' LIMIT ', String.valueOf(strLimit)
+                    });
+        }
+        queryStr = queryStr.replace('\\', '');
+	
 		return Database.query(queryStr);
 	}
 

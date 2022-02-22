@@ -203,22 +203,22 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
     visibilityOptions
     alignmentOptions;
     customTypeOptions = [{
-            label: HTML,
-            value: HTML
-        },
-        {
-            label: JSON_STR,
-            value: JSON_STR
-        }
+        label: HTML,
+        value: HTML
+    },
+    {
+        label: JSON_STR,
+        value: JSON_STR
+    }
     ];
     jsonAvailabilityOptions = [{
-            label: SECTION_LEVEL,
-            value: SECTION_LEVEL
-        },
-        {
-            label: TEMPLATE_LEVEL,
-            value: TEMPLATE_LEVEL
-        }
+        label: SECTION_LEVEL,
+        value: SECTION_LEVEL
+    },
+    {
+        label: TEMPLATE_LEVEL,
+        value: TEMPLATE_LEVEL
+    }
     ];
     sectionToRemove = {};
     fieldToRemove = {};
@@ -227,13 +227,13 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
     error;
     additionalInfoJSON = {};
     orderByOptions = [{
-            label: 'ASC',
-            value: 'ASC'
-        },
-        {
-            label: 'DESC',
-            value: 'DESC'
-        }
+        label: 'ASC',
+        value: 'ASC'
+    },
+    {
+        label: 'DESC',
+        value: 'DESC'
+    }
     ];
     formats = ['font', 'size', 'bold', 'italic', 'underline',
         'strike', 'list', 'indent', 'align', 'link',
@@ -701,10 +701,10 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
             //pRecordType: this.selectedRT
             createDefaultTemplateUsingToolingAPI({
 
-                    pTemplateId: this.templateId,
-                    pObjectName: this.selectedObject,
-                    pRecordType: this.templateData.recordType
-                })
+                pTemplateId: this.templateId,
+                pObjectName: this.selectedObject,
+                pRecordType: this.templateData.recordType
+            })
                 .then(data => {
                     this.isLoading = false;
                     window.location.reload();
@@ -909,7 +909,9 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
     }
 
     handleSectionQueryJSONChange(event) {
+        console.log("this.templateData.sections" + JSON.stringify(this.templateData.sections))
         let currentSection = this.templateData.sections.find(ele => ele.key === event.currentTarget.dataset.id);
+        console.log("current section of template data" + JSON.stringify(currentSection))
         if (currentSection && !currentSection.hasOwnProperty('queryJSONobj')) {
             this.resetQueryJsonObj(currentSection, RELATED_RECORDS);
         } else if (currentSection && currentSection.hasOwnProperty('queryJSONobj')) {
@@ -1199,8 +1201,8 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                 idList.push(this.sectionToRemove.fields[i].id);
             }
             deleteContent({
-                    contentIdList: idList
-                })
+                contentIdList: idList
+            })
                 .then(resp => {
                     this.removeSectionFromUI(this.sectionToRemove.key);
                     this.sectionToRemove = {};
@@ -1281,11 +1283,7 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                     let currentField = currentSection.fields.find(ele => ele.key === this.CurrentFieldKey);
                     currentField.referenceField = this.showFields;
                 }
-            } else
-
-
-
-            {
+            } else {
                 let selectedFields = [];
                 let sectionKey = this.CurrentFieldKey;
                 let currentSection = this.templateData.sections.find(ele => ele.key === sectionKey);
@@ -1340,8 +1338,8 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
         let idList = [];
         idList.push(this.fieldToRemove.id);
         deleteContent({
-                contentIdList: idList
-            })
+            contentIdList: idList
+        })
             .then(resp => {
                 this.removeFieldFromUI(this.fieldToRemove.key);
                 this.fieldToRemove = {};
@@ -1403,10 +1401,10 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                     apiName: DOCUMENT_TEMPLATE.objectApiName,
                     fields: fields
                 };
-               
+
                 createRecord(recordInput)
                     .then(doctemplate => {
-                   
+
                         this.newTemplateId = doctemplate.id;
                         for (let i in this.templateData.sections) {
                             let section = this.templateData.sections[i];
@@ -1418,11 +1416,11 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                                 section.queryJSON = JSON.stringify(section.queryJSONobj);
                             }
                         }
-                       
+
                         upsertSectionAndFields({
-                                templateId: doctemplate.id,
-                                sections: this.templateData.sections
-                            })
+                            templateId: doctemplate.id,
+                            sections: this.templateData.sections
+                        })
                             .then(resp => {
                                 showCustomToast(this, 'Success', 'Records saved successfully!', 'success');
                                 // this.resetTemplateData();
@@ -1434,27 +1432,26 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                                 showError(this, error);
                                 this.isLoading = false;
                             });
-                      
+
                     })
-                    .catch(error => {                      
-                        if (error.body && 	error.body.enhancedErrorType &&
+                    .catch(error => {
+                        if (error.body && error.body.enhancedErrorType &&
                             error.body.enhancedErrorType.toLowerCase() === 'recorderror' &&
-                            error.body.output){            
-                                
+                            error.body.output) {
+
                             if (error.body.output.errors.length &&
                                 error.body.output.errors[0].errorCode === 'DUPLICATE_VALUE'
-                                ||error.body.output.fieldErrors &&
+                                || error.body.output.fieldErrors &&
                                 error.body.output.fieldErrors.Name &&
                                 error.body.output.fieldErrors.Name.length &&
                                 error.body.output.fieldErrors.Name[0].errorCode === 'FIELD_CUSTOM_VALIDATION_EXCEPTION') {
                                 showCustomToast(this, 'Error', 'Template Name should be unique.', 'error');
                             }
-                            else                                                
-                            showError(this, error);
-                        
+                            else
+                                showError(this, error);
+
                         }
-                        else
-                        {                        
+                        else {
                             showError(this, error);
                         }
                         this.isLoading = false;
@@ -1479,9 +1476,9 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                         //  console.log(this.templateData.sections);
 
                         upsertSectionAndFields({
-                                templateId: this.templateData.id,
-                                sections: this.templateData.sections
-                            })
+                            templateId: this.templateData.id,
+                            sections: this.templateData.sections
+                        })
                             .then(resp => {
                                 showCustomToast(this, 'Success', 'Records saved successfully!', 'success');
                                 refreshApex(this.response);
@@ -1495,22 +1492,21 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                             });
                     })
                     .catch(error => {
-                        if (error.body && 	error.body.enhancedErrorType &&
+                        if (error.body && error.body.enhancedErrorType &&
                             error.body.enhancedErrorType.toLowerCase() === 'recorderror' &&
-                            error.body.output){
+                            error.body.output) {
                             if (error.body.output.errors.length &&
                                 error.body.output.errors[0].errorCode === 'DUPLICATE_VALUE'
-                                ||error.body.output.fieldErrors &&
+                                || error.body.output.fieldErrors &&
                                 error.body.output.fieldErrors.Name &&
                                 error.body.output.fieldErrors.Name.length &&
                                 error.body.output.fieldErrors.Name[0].errorCode === 'FIELD_CUSTOM_VALIDATION_EXCEPTION') {
                                 showCustomToast(this, 'Error', 'Template Name should be unique.', 'error');
-                                }
-                                else                                                
+                            }
+                            else
                                 showError(this, error);
                         }
-                        else
-                        {                        
+                        else {
                             showError(this, error);
                         }
 
@@ -1891,8 +1887,8 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
                             this.fetchParentFieldAPI(); //SKP:to populate Parent Field API
                         }
                         getFieldNameForRefField({
-                                objectName: this.templateData.parentObjectName
-                            })
+                            objectName: this.templateData.parentObjectName
+                        })
                             .then(data => {
                                 if (data) {
                                     this.refFields = data;
@@ -2087,8 +2083,8 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
         let currentSection = this.templateData.sections.find(ele => ele.key === event.currentTarget.dataset.id);
         if (this.documentContentRecordId) {
             getDocumentContentSectionWrapper({
-                    DocumentContentId: this.documentContentRecordId
-                })
+                DocumentContentId: this.documentContentRecordId
+            })
                 .then(data => {
                     let tempKey = Math.random().toString(36).substring(2, 15);
 
@@ -2281,8 +2277,8 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
         this.templateData.parentObjectName = this.objectName;
         this.fetchChildObjects = this.objectName + '-getChild';
         getFieldNameForRefField({
-                objectName: this.templateData.parentObjectName
-            })
+            objectName: this.templateData.parentObjectName
+        })
             .then(data => {
                 if (data) {
                     this.refFields = data;
@@ -2373,10 +2369,10 @@ export default class TemplateEditor extends NavigationMixin(LightningElement) {
         this.isLoading = true;
 
         createDefaultTemplateUsingToolingAPI({
-                pTemplateId: this.templateId,
-                pObjectName: this.selectedObject,
-                pRecordType: this.templateData.recordType
-            })
+            pTemplateId: this.templateId,
+            pObjectName: this.selectedObject,
+            pRecordType: this.templateData.recordType
+        })
             .then(data => {
                 this.isLoading = false;
                 window.location.reload();
